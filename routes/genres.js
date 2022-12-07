@@ -1,4 +1,4 @@
-const { auth, admin } = require("../middleware");
+const auth = require("../middleware/auth");
 const mongoose = require("mongoose");
 const express = require("express");
 const Joi = require("joi");
@@ -37,8 +37,12 @@ router.get("/create", (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const genres = await Genre.find();
-  res.send(genres);
+  try {
+    const genres = await Genre.find();
+    res.send(genres);
+  } catch (error) {
+    res.status(500).send("Something failed.");
+  }
 });
 
 router.get("/:id", async (req, res) => {
